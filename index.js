@@ -23,12 +23,12 @@ if (typeof QUnit === 'undefined' && typeof require !== 'undefined') {
     QUnit.config.testNumber = argv.test;
     module.exports = QUnit;
     
-    var errors = [];
+    var errors = [],
+        printedModule = false;
 
-    // print the name of each module
+    // keep track of whether we've printed the module name yet
     QUnit.moduleStart(function(details) {
-        if (!argv.quiet)
-            console.log('\n' + details.name.bold.blue);
+        printedModule = false;
     });
 
     // when an individual assertion fails, add it to the list of errors to display
@@ -39,10 +39,11 @@ if (typeof QUnit === 'undefined' && typeof require !== 'undefined') {
 
     // when a test ends, print success/failure and any errors
     QUnit.testDone(function(details) {
-        if (details.failed === 0) {
-            if (!argv.quiet)
-                console.log(('  ✔ ' + details.name).green);
-        } else {
+        // print the name of each module
+        if (!printedModule && (printedModule = !argv.quiet || details.failed))
+            console.log('\n' + details.module.bold.blue);
+        
+        if (details.failed) {
             console.log(('  ✖ ' + details.name).red);
         
             errors.forEach(function(error) {
@@ -54,6 +55,8 @@ if (typeof QUnit === 'undefined' && typeof require !== 'undefined') {
             });
         
             errors.length = 0;
+        } else if (!argv.quiet) {
+            console.log(('  ✔ ' + details.name).green);
         }
     });
 
