@@ -1,7 +1,7 @@
 (function() {
 
 // Make sure we're in a non-browser environment
-if (typeof QUnit === 'undefined' && typeof require !== 'undefined') {
+if (typeof QUnit === 'undefined' && typeof require === 'function') {
     // Currently requires an old version of QUnit because 
     // of a regression that breaks Node.js compatibility.
     // See https://github.com/jquery/qunit/pull/401
@@ -69,6 +69,8 @@ if (typeof QUnit === 'undefined' && typeof require !== 'undefined') {
             console.log((msg + ', ' + details.failed + ' failed.').red.bold);
         else
             console.log((msg + '.').green.bold);
+            
+        process.exit(details.failed);
     });
 }
 
