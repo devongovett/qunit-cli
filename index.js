@@ -69,8 +69,10 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
             console.log((msg + ', ' + details.failed + ' failed.').red.bold);
         else
             console.log((msg + '.').green.bold);
-            
-        process.exit(details.failed);
+        
+        process.once('exit', function() {    
+            process.exit(details.failed);
+        });
     });
 }
 
