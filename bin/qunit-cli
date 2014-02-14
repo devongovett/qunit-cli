@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 
+var argv = require('optimist')
+    .alias('code', 'c')
+    .describe('code', 'Path to code you want to test')
+    .demand(1)
+    .argv;
+
 var resolve = require('path').resolve;
 
 // Request at least one test file as parameter
-var files = require('optimist').demand(1).argv._;
+var files = argv._;
 
 var QUnit = require('../index');
 
@@ -12,6 +18,43 @@ global.QUnit = QUnit;
 
 for(var key in QUnit)
   global[key] = QUnit[key];
+
+// Add code to test
+var code = argv.code;
+if(code)
+{
+  function setGlobal(code)
+  {
+    code = code.split(':');
+
+    var namespace;
+    if(code.length > 1)
+    {
+      namespace = code[0];
+      code      = code[1];
+    }
+    else
+      code = code[0];
+
+    code = require(resolve(code));
+
+    if(namespace)
+      global[namespace] = code;
+
+    else
+      for(var key in code)
+        global[key] = code[key];
+  };
+
+  if(code instanceof Array)
+    code.forEach(function(c)
+    {
+      setGlobal(c);
+    });
+
+  else
+    setGlobal(code);
+};
 
 // Import test files
 files.forEach(function(file)
