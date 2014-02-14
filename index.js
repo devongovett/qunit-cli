@@ -7,7 +7,7 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
     // See https://github.com/jquery/qunit/pull/401
     var QUnit = require('qunitjs'),
         colors = require('colors');
-        
+
     var argv = require('optimist')
         .alias('module', 'm')
         .describe('module', 'Run an individual module')
@@ -17,12 +17,12 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
         .describe('quiet', 'Hide passed tests')
         .boolean('quiet')
         .argv;
-    
+
     QUnit.config.autorun = false;
     QUnit.config.module = argv.module;
     QUnit.config.testNumber = argv.test;
     module.exports = QUnit;
-    
+
     var errors = [],
         printedModule = false;
 
@@ -42,18 +42,18 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
         // print the name of each module
         if (!printedModule && (printedModule = !argv.quiet || details.failed))
             console.log('\n' + details.module.bold.blue);
-        
+
         if (details.failed) {
             console.log(('  ✖ ' + details.name).red);
-        
+
             errors.forEach(function(error) {
                 if (error.message)
                     console.log('    ' + error.message.red);
-                
+
                 if (typeof error.actual !== 'undefined')
                     console.log(('    ' + error.actual + ' != ' + error.expected).red);
             });
-        
+
             errors.length = 0;
         } else if (!argv.quiet) {
             console.log(('  ✔ ' + details.name).green);
@@ -64,12 +64,12 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
     QUnit.done(function(details) {
         console.log(('\nTests completed in ' + details.runtime + ' milliseconds.').grey);
         var msg = details.passed + ' tests of ' + details.total + ' passed';
-    
+
         if (details.failed > 0)
             console.log((msg + ', ' + details.failed + ' failed.').red.bold);
         else
             console.log((msg + '.').green.bold);
-        
+
         process.once('exit', function() {    
             process.exit(details.failed);
         });

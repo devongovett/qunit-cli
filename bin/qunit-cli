@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+var resolve = require('path').resolve;
+
+// Request at least one test file as parameter
+var files = require('optimist').demand(1).argv._;
+
+var QUnit = require('../index');
+
+// Define QUnit globals
+global.QUnit = QUnit;
+
+for(var key in QUnit)
+  global[key] = QUnit[key];
+
+// Import test files
+files.forEach(function(file)
+{
+  require(resolve(file))
+});
