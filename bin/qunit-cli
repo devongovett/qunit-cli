@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 
+// Request at least one test file as parameter
 var argv = require('optimist')
     .alias('code', 'c')
-    .describe('code', 'Path to code you want to test')
+    .describe('code', 'Path to code loaded globally')
     .demand(1)
     .argv;
 
-var resolve = require('path').resolve;
-
-// Request at least one test file as parameter
 var files = argv._;
 
-var QUnit = require('../index');
+// Resolve modules
+var resolve = require('path').resolve;
+var QUnit   = require('..');
 
 // Define QUnit globals
 global.QUnit = QUnit;
@@ -56,7 +56,7 @@ if(code)
     setGlobal(code);
 };
 
-// Import test files
+// Run tests
 files.forEach(function(file)
 {
   require(resolve(file))
