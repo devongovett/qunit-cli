@@ -16,48 +16,43 @@ var QUnit   = require('..');
 // Define QUnit globals
 global.QUnit = QUnit;
 
-for(var key in QUnit)
+for (var key in QUnit)
   global[key] = QUnit[key];
 
 // Add code to test
 var code = argv.code;
-if(code)
-{
-  function setGlobal(code)
-  {
+if (code) {
+  function setGlobal(code) {
     code = code.split(':');
 
     var namespace;
-    if(code.length > 1)
-    {
+    if (code.length > 1) {
       namespace = code[0];
       code      = code[1];
-    }
-    else
+    } else {
       code = code[0];
+    }
 
     code = require(resolve(code));
-
-    if(namespace)
+    if (namespace) {
       global[namespace] = code;
 
-    else
-      for(var key in code)
+    } else {
+      for (var key in code)
         global[key] = code[key];
-  };
+    }
+  }
 
-  if(code instanceof Array)
-    code.forEach(function(c)
-    {
+  if (code instanceof Array) {
+    code.forEach(function(c) {
       setGlobal(c);
     });
-
-  else
+  } else {
     setGlobal(code);
+  }
 };
 
 // Run tests
-files.forEach(function(file)
-{
+files.forEach(function(file) {
   require(resolve(file))
 });
