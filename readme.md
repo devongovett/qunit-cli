@@ -14,28 +14,30 @@ To use this module, first install it using npm
 
 Now, you can use it in two ways:
 
-a) include it at the top of your test files.
+1. Include it at the top of your test files.
 
-    if (typeof QUnit == 'undefined') // if your tests also run in the browser...
-        QUnit = require('qunit-cli');
-    
-    // use QUnit as you normally would.
+        if (typeof QUnit == 'undefined') // if your tests also run in the browser...
+            QUnit = require('qunit-cli');
+        
+        // use QUnit as you normally would.
 
-Note that this module does not introduce QUnit into the global scope like QUnit
-does in the browser, so you'll have to do that yourself if needed.
+    Note that this module does not introduce QUnit into the global scope like QUnit
+    does in the browser, so you'll have to do that yourself if needed.
 
-To run, use the `node` program.
+    To run, use the `node` program.
 
-    node mytests.js
+        node mytests.js
 
-b) use the command-line testrunner located at `bin/qunit-cli`, passing it the
-test files as arguments.
+2. Use the command-line testrunner located at `bin/qunit-cli`, passing it the test files as arguments.
+    If you install the module globally using npm, you can use the `qunit-cli` command which will be 
+    installed into your PATH.
 
-    bin/qunit-cli mytests.js
+        npm install qunit-cli -g
+        qunit-cli mytests.js
 
-This will introduce QUnit into the global scope like QUnit does in the browser,
-so you'll don't need to modify the tests themselves. You can use both methods in
-the same test files without problems.
+    This will introduce QUnit into the global scope like QUnit does in the browser,
+    so you don't need to modify the tests themselves. You can use both methods in
+    the same test files without problems.
 
 ## Command line options
 
@@ -47,7 +49,7 @@ testing interface.  They are:
     --test,   -t    Limits testing to a single test (by number)
     --quiet,  -q    Flag to hide passed tests from the output
 
-The command-line testrunner has some more options available:
+The command-line test runner has some additional options available:
 
     --code,   -c    Path to code loaded globally. You can prefix a namespace
                     using a colon (:)
