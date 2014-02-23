@@ -1,0 +1,63 @@
+#!/usr/bin/env node
+
+// Request at least one test file as parameter
+var argv = require('optimist')
+    .alias('code', 'c')
+    .describe('code', 'Path to code loaded globally')
+    .demand(1)
+    .argv;
+
+var files = argv._;
+
+// Resolve modules
+var resolve = require('path').resolve;
+var QUnit   = require('..');
+
+// Define QUnit globals
+global.QUnit = QUnit;
+
+for(var key in QUnit)
+  global[key] = QUnit[key];
+
+// Add code to test
+var code = argv.code;
+if(code)
+{
+  function setGlobal(code)
+  {
+    code = code.split(':');
+
+    var namespace;
+    if(code.length > 1)
+    {
+      namespace = code[0];
+      code      = code[1];
+    }
+    else
+      code = code[0];
+
+    code = require(resolve(code));
+
+    if(namespace)
+      global[namespace] = code;
+
+    else
+      for(var key in code)
+        global[key] = code[key];
+  };
+
+  if(code instanceof Array)
+    code.forEach(function(c)
+    {
+      setGlobal(c);
+    });
+
+  else
+    setGlobal(code);
+};
+
+// Run tests
+files.forEach(function(file)
+{
+  require(resolve(file))
+});
