@@ -8,13 +8,13 @@ testing framework.
 
 ## Usage
 
-To use this module, first install it using npm
+There are two ways to use qunit-cli:
 
-    npm install qunit-cli
+1. Include it at the top of your test files. First, install the module using npm.
 
-Now, you can use it in two ways:
+        npm install qunit-cli
 
-1. Include it at the top of your test files.
+    And now, require it in your test files:
 
         if (typeof QUnit == 'undefined') // if your tests also run in the browser...
             QUnit = require('qunit-cli');
