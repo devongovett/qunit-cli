@@ -53,14 +53,17 @@ The command-line test runner has some additional options available:
 
     --code,   -c    Path to code loaded globally. You can prefix a namespace
                     using a colon (:)
+
+Here are some examples:
+
 ```bash
-qunit-cli -c /path/to/code test.js
 # code exports are added to global namespace
-```
-```bash
-qunit-cli -c ns:/path/to/code test.js
+qunit-cli -c /path/to/code test.js
+
 # code exports are added to ns namespace
+qunit-cli -c ns:/path/to/code test.js
 ```
+
 ## License
 
 `qunit-cli` is released under the MIT license.
