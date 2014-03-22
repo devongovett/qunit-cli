@@ -45,9 +45,9 @@ There are several command line options available when running your tests using
 qunit-cli that mimic some of the options in the standard browser-based QUnit
 testing interface.  They are:
 
-    --module, -m    Limits testing to an individual module
-    --test,   -t    Limits testing to a single test (by number)
-    --quiet,  -q    Flag to hide passed tests from the output
+    --module,     -m    Limits testing to an individual module
+    --testNumber, -t    Limits testing to a single test (by number)
+    --quiet,      -q    Flag to hide passed tests from the output
 
 The command-line test runner has some additional options available:
 

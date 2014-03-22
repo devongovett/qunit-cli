@@ -11,8 +11,9 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
     var argv = require('optimist')
         .alias('module', 'm')
         .describe('module', 'Run an individual module')
-        .alias('test', 't')
-        .describe('test', 'Run an individual test by number')
+        .alias('testNumber', 'test')  /** @deprecated */
+        .alias('testNumber', 't')
+        .describe('testNumber', 'Run an individual test by number')
         .alias('quiet', 'q')
         .describe('quiet', 'Hide passed tests')
         .boolean('quiet')
@@ -20,7 +21,7 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
 
     QUnit.config.autorun = false;
     QUnit.config.module = argv.module;
-    QUnit.config.testNumber = argv.test;
+    QUnit.config.testNumber = argv.testNumber;
     module.exports = QUnit;
 
     var errors = [],
