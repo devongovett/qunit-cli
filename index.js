@@ -8,7 +8,7 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
     var QUnit = require('qunitjs'),
         colors = require('colors');
 
-    var argv = require('optimist')
+    var optimist = require('optimist')
         .describe('hidepassed', 'Show only the failing tests, hiding all that pass')
         .default('hidepassed', false)
         .alias('module', 'm')
@@ -22,7 +22,8 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
         .alias('quiet', 'q')
         .describe('quiet', 'Hide passed tests (deprecated)')
         .boolean('quiet')
-        .argv;
+        .describe('urlConfig', 'Add a config parameter of your own in JSON');
+    var argv = optimist.argv;
 
     // Deprecation notices
 
@@ -44,6 +45,39 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
     QUnit.config.requireExpects = argv.requireExpects;
     QUnit.config.testNumber = argv.testNumber;
     QUnit.config.testTimeout = argv.testTimeout;
+
+    // Add user own config parameters
+    var urlConfig = argv.urlConfig;
+    if (urlConfig) {
+      function addConfig(urlConfig) {
+        urlConfig = JSON.parse(urlConfig);
+
+        // Add config parameter to QUnit-cli so it can be checked
+        var id    = urlConfig.id;
+        var value = urlConfig.value;
+
+        optimist.describe(id, urlConfig.tooltip || urlConfig.label);
+
+        if(value == undefined)
+          optimist.boolean(id);
+        else if(typeof value == 'string')
+          optimist.boolean(id);
+
+        // Add config parameter to QUnit so it can be processed
+        QUnit.config.urlConfig.push(urlConfig);
+      }
+
+      if (urlConfig instanceof Array) {
+        urlConfig.forEach(function(config) {
+          addConfig(config);
+        });
+      } else {
+        addConfig(urlConfig);
+      }
+    };
+
+    // Check arguments against user own config parameters
+    argv = optimist.argv;
 
     module.exports = QUnit;
 
