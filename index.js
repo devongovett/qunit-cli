@@ -71,11 +71,8 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
       delete argv.test;
     };
 
-    if(argv.quiet != undefined)
-    {
+    if(argv.quiet)
       console.warn('"quiet" parameter is deprecated, please use "hidepassed" instead');
-      delete argv.quiet;
-    };
 
     // QUnit configurations
     delete argv.urlConfig;
