@@ -9,19 +9,42 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
         colors = require('colors');
 
     var argv = require('optimist')
+        .describe('hidepassed', 'Show only the failing tests, hiding all that pass')
+        .default('hidepassed', false)
         .alias('module', 'm')
         .describe('module', 'Run an individual module')
-        .alias('testNumber', 'test')  /** @deprecated */
+        .describe('requireExpects', 'Require each test to specify the number of expected assertions')
+        .default('requireExpects', false)
         .alias('testNumber', 't')
         .describe('testNumber', 'Run an individual test by number')
+        .describe('test', 'Run an individual test by number (deprecated)')
+        .describe('testTimeout', 'Global timeout in milliseconds after which all tests will fail')
         .alias('quiet', 'q')
-        .describe('quiet', 'Hide passed tests')
+        .describe('quiet', 'Hide passed tests (deprecated)')
         .boolean('quiet')
         .argv;
 
+    // Deprecation notices
+
+    if(argv.test != undefined)
+    {
+      console.warn('"test" parameter is deprecated, please use "testNumber" instead');
+      argv.testNumber = argv.testNumber || argv.test;
+    };
+
+    if(argv.quiet != undefined)
+      console.warn('"quiet" parameter is deprecated, please use "hidepassed" instead');
+
+    // QUnit configurations
+
     QUnit.config.autorun = false;
+
+    QUnit.config.hidepassed = argv.hidepassed;
     QUnit.config.module = argv.module;
+    QUnit.config.requireExpects = argv.requireExpects;
     QUnit.config.testNumber = argv.testNumber;
+    QUnit.config.testTimeout = argv.testTimeout;
+
     module.exports = QUnit;
 
     var errors = [],
