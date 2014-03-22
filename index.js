@@ -8,7 +8,14 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
     var QUnit = require('qunitjs'),
         colors = require('colors');
 
+    // Get user own config parameters
     var optimist = require('optimist')
+        .describe('urlConfig', 'Add a config parameter of your own in JSON')
+        .string('urlConfig');
+    var argv = optimist.argv;
+
+    // Define normal config parameters
+    optimist
         .describe('hidepassed', 'Show only the failing tests, hiding all that pass')
         .default('hidepassed', false)
         .alias('module', 'm')
@@ -21,32 +28,9 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
         .describe('testTimeout', 'Global timeout in milliseconds after which all tests will fail')
         .alias('quiet', 'q')
         .describe('quiet', 'Hide passed tests (deprecated)')
-        .boolean('quiet')
-        .describe('urlConfig', 'Add a config parameter of your own in JSON');
-    var argv = optimist.argv;
+        .boolean('quiet');
 
-    // Deprecation notices
-
-    if(argv.test != undefined)
-    {
-      console.warn('"test" parameter is deprecated, please use "testNumber" instead');
-      argv.testNumber = argv.testNumber || argv.test;
-    };
-
-    if(argv.quiet != undefined)
-      console.warn('"quiet" parameter is deprecated, please use "hidepassed" instead');
-
-    // QUnit configurations
-
-    QUnit.config.autorun = false;
-
-    QUnit.config.hidepassed = argv.hidepassed;
-    QUnit.config.module = argv.module;
-    QUnit.config.requireExpects = argv.requireExpects;
-    QUnit.config.testNumber = argv.testNumber;
-    QUnit.config.testTimeout = argv.testTimeout;
-
-    // Add user own config parameters
+    // Add user own config parameters and if so, override normal ones
     var urlConfig = argv.urlConfig;
     if (urlConfig) {
       function addConfig(urlConfig) {
@@ -76,8 +60,30 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
       }
     };
 
-    // Check arguments against user own config parameters
+    // Check arguments
     argv = optimist.argv;
+
+    // Deprecation notices
+    if(argv.test != undefined)
+    {
+      console.warn('"test" parameter is deprecated, please use "testNumber" instead');
+      argv.testNumber = argv.testNumber || argv.test;
+      delete argv.test;
+    };
+
+    if(argv.quiet != undefined)
+    {
+      console.warn('"quiet" parameter is deprecated, please use "hidepassed" instead');
+      delete argv.quiet;
+    };
+
+    // QUnit configurations
+    delete argv.urlConfig;
+
+    QUnit.config.autorun = false;
+
+    for(var key in argv)
+      QUnit.config[key] = argv[key];
 
     module.exports = QUnit;
 
