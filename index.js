@@ -31,6 +31,8 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
         .boolean('quiet');
 
     // Add user own config parameters and if so, override normal ones
+    var consts = {};
+
     var urlConfig = argv.urlConfig;
     if (urlConfig) {
       function addConfig(urlConfig) {
@@ -45,7 +47,13 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
         if(value == undefined)
           optimist.boolean(id);
         else if(typeof value == 'string')
+        {
           optimist.boolean(id);
+
+          consts[id] = value;
+        }
+        else if(!(value instanceof Array))
+          optimist.string(id);
 
         // Add config parameter to QUnit so it can be processed
         QUnit.config.urlConfig.push(urlConfig);
@@ -80,7 +88,7 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
     QUnit.config.autorun = false;
 
     for(var key in argv)
-      QUnit.config[key] = argv[key];
+      QUnit.config[key] = consts[key] || argv[key];
 
     module.exports = QUnit;
 
