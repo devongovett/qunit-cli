@@ -45,9 +45,13 @@ There are several command line options available when running your tests using
 qunit-cli that mimic some of the options in the standard browser-based QUnit
 testing interface.  They are:
 
-    --module,     -m    Limits testing to an individual module
-    --testNumber, -t    Limits testing to a single test (by number)
-    --quiet,      -q    Flag to hide passed tests from the output
+    --hidepassed,           Show only the failing tests, hiding all that pass
+    --module,         -m    Limits testing to an individual module
+    --requireExpects,       Require each test to specify the number of expected assertions
+    --testNumber,     -t    Limits testing to a single test (by number)
+    --testTimeout,          Global timeout in milliseconds after which all tests will fail
+    --quiet,          -q    Flag to hide passed tests from the output (deprecated)
+    --urlConfig,            Add a config parameter of your own in JSON
 
 The command-line test runner has some additional options available:
 
