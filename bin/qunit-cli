@@ -52,6 +52,9 @@ if (code) {
   }
 };
 
+// Load QUnit tests
+QUnit.load();
+
 // Run tests
 files.forEach(function(file) {
   require(resolve(file))
