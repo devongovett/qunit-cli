@@ -52,8 +52,10 @@ if (code) {
   }
 };
 
-// Load QUnit tests
+// Load QUnit test framework
+var config = QUnit.extend({}, QUnit.config);
 QUnit.load();
+QUnit.extend(QUnit.config, config)
 
 // Run tests
 files.forEach(function(file) {
