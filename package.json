@@ -14,8 +14,8 @@
   "bugs": "http://github.com/devongovett/qunit/issues",
   "dependencies": {
       "colors": "*",
-      "qunitjs": "1.10.x",
-      "optimist": ">=0.3"
+      "qunitjs": "1.14.x",
+      "optimist": ">=0.6"
   },
   "bin": "bin/qunit-cli"
 }
