@@ -2,7 +2,7 @@
 
 // Make sure we're in a non-browser environment
 if (typeof QUnit === 'undefined' && typeof require === 'function') {
-    // Currently requires an old version of QUnit because 
+    // Currently requires an old version of QUnit because
     // of a regression that breaks Node.js compatibility.
     // See https://github.com/jquery/qunit/pull/401
     var QUnit = require('qunitjs'),
@@ -110,7 +110,14 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
     QUnit.testDone(function(details) {
         // print the name of each module
         if (!printedModule && (printedModule = !argv.quiet || details.failed))
-            console.log('\n' + details.module.bold.blue);
+        {
+            // Separate each module with an empty line
+            console.log('\n');
+
+            // Only print module name if it's defined
+            if (details.module)
+                console.log(details.module.bold.blue);
+        }
 
         if (details.failed) {
             console.log(('  ✖ ' + details.name).red);
@@ -139,7 +146,7 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
         else
             console.log((msg + '.').green.bold);
 
-        process.once('exit', function() {    
+        process.once('exit', function() {
             process.exit(details.failed);
         });
     });
