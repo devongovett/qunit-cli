@@ -95,9 +95,20 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
     var errors = [],
         printedModule = false;
 
+    function printModule(name)
+    {
+      // Separate each module with an empty line
+      console.log('\n');
+
+      // Only print module name if it's defined
+      if (name)
+          console.log(name.bold.blue);
+    }
+
     // keep track of whether we've printed the module name yet
     QUnit.moduleStart(function(details) {
-        printedModule = false;
+        if (printedModule = !argv.quiet)
+          printModule(details.name);
     });
 
     // when an individual assertion fails, add it to the list of errors to display
@@ -109,15 +120,8 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
     // when a test ends, print success/failure and any errors
     QUnit.testDone(function(details) {
         // print the name of each module
-        if (!printedModule && (printedModule = !argv.quiet || details.failed))
-        {
-            // Separate each module with an empty line
-            console.log('\n');
-
-            // Only print module name if it's defined
-            if (details.module)
-                console.log(details.module.bold.blue);
-        }
+        if (!printedModule && details.failed)
+          printModule(details.module);
 
         if (details.failed) {
             console.log(('  ✖ ' + details.name).red);
