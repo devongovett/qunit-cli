@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 
+var fs = require('fs');
+
+var extname = require('path').extname;
+
 // Request at least one test file as parameter
 var argv = require('optimist')
     .alias('code', 'c')
@@ -59,5 +63,27 @@ QUnit.extend(QUnit.config, config)
 
 // Run tests
 files.forEach(function(file) {
-  require(resolve(file))
+  file = resolve(file);
+
+  fs.stat(file, function(error, stats)
+  {
+    if(error) return console.warn(error);
+
+    if(stats.isDirectory())
+      fs.readdir(file, function(error, files)
+      {
+        if(error) return console.warn(error);
+
+        files.forEach(function(name)
+        {
+          name = resolve(file, name);
+
+          if(extname(name) != '.js') return console.warn('Unknown file type:',name)
+
+          require(name)
+        });
+      })
+    else
+      require(file)
+  })
 });
