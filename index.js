@@ -1,10 +1,10 @@
 (function() {
 
-// Make sure we're in a non-browser environment
-if (typeof QUnit === 'undefined' && typeof require === 'function') {
-    // Currently requires an old version of QUnit because 
-    // of a regression that breaks Node.js compatibility.
-    // See https://github.com/jquery/qunit/pull/401
+    // Make sure we're in a non-browser environment
+    if (typeof QUnit !== 'undefined' || typeof require !== 'function') {
+        return;
+    }
+
     var QUnit = require('qunitjs'),
         colors = require('colors');
 
@@ -18,16 +18,18 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
         .boolean('quiet')
         .argv;
 
+
+    // Based on qunit's test set up for node
+    // https://github.com/jquery/qunit/blob/c0d9ad6cfc73157b03bc9bec5b0aee875150b5aa/Gruntfile.js#L176-222
     QUnit.config.autorun = false;
     QUnit.config.module = argv.module;
-    QUnit.config.testNumber = argv.test;
     module.exports = QUnit;
 
     var errors = [],
         printedModule = false;
 
     // keep track of whether we've printed the module name yet
-    QUnit.moduleStart(function(details) {
+    QUnit.moduleStart(function() {
         printedModule = false;
     });
 
@@ -74,6 +76,5 @@ if (typeof QUnit === 'undefined' && typeof require === 'function') {
             process.exit(details.failed);
         });
     });
-}
 
 })();

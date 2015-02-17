@@ -7,6 +7,8 @@ var argv = require('optimist')
     .demand(1)
     .argv;
 
+var assign = require('object-assign')
+
 var files = argv._;
 
 // Resolve modules
@@ -16,43 +18,39 @@ var QUnit   = require('..');
 // Define QUnit globals
 global.QUnit = QUnit;
 
-for (var key in QUnit)
-  global[key] = QUnit[key];
+assign(global, QUnit);
 
-// Add code to test
+function setGlobal(code) {
+  code = code.split(':');
+
+  var namespace;
+  if (code.length > 1) {
+    namespace = code[0];
+    code      = code[1];
+  } else {
+    code = code[0];
+  }
+
+  code = require(resolve(code));
+  if (namespace) {
+    global[namespace] = code;
+  } else {
+    assign(global, code);
+  }
+}
+
+// Expose exports of code globally
 var code = argv.code;
 if (code) {
-  function setGlobal(code) {
-    code = code.split(':');
-
-    var namespace;
-    if (code.length > 1) {
-      namespace = code[0];
-      code      = code[1];
-    } else {
-      code = code[0];
-    }
-
-    code = require(resolve(code));
-    if (namespace) {
-      global[namespace] = code;
-
-    } else {
-      for (var key in code)
-        global[key] = code[key];
-    }
-  }
-
-  if (code instanceof Array) {
-    code.forEach(function(c) {
-      setGlobal(c);
-    });
-  } else {
-    setGlobal(code);
-  }
-};
+  code = Array.isArray(code) ? code : [code];
+  code.forEach(setGlobal);
+}
 
 // Run tests
 files.forEach(function(file) {
   require(resolve(file))
 });
+
+
+// Start the suite
+QUnit.load();

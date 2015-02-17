@@ -3,19 +3,23 @@
   "description": "A command line interface for the QUnit testing framework",
   "version": "0.1.4",
   "author": {
-      "name": "Devon Govett",
-      "email": "devongovett@gmail.com",
-      "url": "http://badassjs.com/"
+    "name": "Devon Govett",
+    "email": "devongovett@gmail.com",
+    "url": "http://badassjs.com/"
+  },
+  "scripts": {
+    "test": "./bin/qunit-cli ./test/simple.js"
   },
   "repository": {
-      "type": "git",
-      "url": "https://github.com/devongovett/qunit-cli.git"
+    "type": "git",
+    "url": "https://github.com/devongovett/qunit-cli.git"
   },
   "bugs": "http://github.com/devongovett/qunit/issues",
   "dependencies": {
-      "colors": "*",
-      "qunitjs": "1.10.x",
-      "optimist": ">=0.3"
+    "colors": "*",
+    "object-assign": "^2.0.0",
+    "optimist": ">=0.3",
+    "qunitjs": "^1.15.0"
   },
   "bin": "bin/qunit-cli"
 }
