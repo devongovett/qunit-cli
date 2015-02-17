@@ -1,7 +1,7 @@
 {
   "name": "qunit-cli",
   "description": "A command line interface for the QUnit testing framework",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "author": {
     "name": "Devon Govett",
     "email": "devongovett@gmail.com",
