@@ -9,7 +9,9 @@ var argv = require('optimist')
 
 var assign = require('object-assign')
 
-var files = argv._;
+// Resolve test file paths
+var flatGlob = require('flat-glob');
+var files = flatGlob.sync(argv._);
 
 // Resolve modules
 var resolve = require('path').resolve;
@@ -50,7 +52,6 @@ if (code) {
 files.forEach(function(file) {
   require(resolve(file))
 });
-
 
 // Start the suite
 QUnit.load();
