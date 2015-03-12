@@ -21,5 +21,6 @@
     "optimist": ">=0.3",
     "qunitjs": "^1.15.0"
   },
-  "bin": "bin/qunit-cli"
+  "bin": "bin/qunit-cli",
+  "preferGlobal": true
 }
