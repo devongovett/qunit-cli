@@ -8,8 +8,9 @@ var argv = require('optimist')
     .argv;
 
 var assign = require('object-assign')
+var globArgs = require('glob-args')
 
-var files = argv._;
+var files = globArgs(argv._);
 
 // Resolve modules
 var resolve = require('path').resolve;
