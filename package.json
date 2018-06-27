@@ -8,7 +8,7 @@
     "url": "http://badassjs.com/"
   },
   "scripts": {
-    "test": "./bin/qunit-cli ./test/simple.js"
+    "test": "node bin/qunit-cli test/*.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
   "bugs": "http://github.com/devongovett/qunit/issues",
   "dependencies": {
     "colors": "*",
+    "glob-args": "^0.2.0",
     "object-assign": "^2.0.0",
     "optimist": ">=0.3",
     "qunitjs": "^1.15.0"
